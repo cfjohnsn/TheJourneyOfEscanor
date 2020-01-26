@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     private bool grounded;
     private SpriteRenderer mySpriteRenderer;
     private Rigidbody2D rigidBody;
+    public Animator animator;
+
 
     // Use this for initialization
     private void Awake()
@@ -20,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Start()
     {
+
     }
 
     void fixedUpdate()
@@ -31,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
 
+
+        animator.SetFloat("Speed", moveSpeed);
         if (Input.GetKeyDown(KeyCode.W))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
@@ -41,16 +46,26 @@ public class PlayerMovement : MonoBehaviour
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);                        
             mySpriteRenderer.flipX = false;
+            moveSpeed = 6;
             
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            moveSpeed = 5;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            moveSpeed = 6;
             if(mySpriteRenderer != null)
             {
                 mySpriteRenderer.flipX = true;
             }
+        }
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            moveSpeed = 5;
         }
 
     }
