@@ -4,37 +4,41 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    private float timeBtwAttack;
+    public float startTimeBtwAttack;
     public Animator animator;
 
-    public Transform attackPoint;
-    public float attackRange = 0.5f;
-    public LayerMask ememyLayers;
+    public Transform attackPos;
+    public float attackRange;
+    public LayerMask whatIsEnemies;
+    public int damage;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+
+        if (timeBtwAttack <= 0)
         {
-            Attack();
+            timeBtwAttack = startTimeBtwAttack;
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                animator.SetTrigger("Attack");
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    //enemiesToDamage[i].GetComponent<Enemy>().health -= damage;
+                }
+            }
+        }
+        else
+        {
+            timeBtwAttack -= Time.deltaTime;
         }
     }
 
-    void Attack()
-    {
-        animator.SetTrigger("Attack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, ememyLayers);
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            Debug.Log("We hit " + enemy.name);
-        }
-    }
-    void OnDrawGizmoSelected()
+    public void TakeDamage(int damage)
     {
 
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
-
-    
-        
      
 
 }
